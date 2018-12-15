@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 vote = "one";
                 loadPhoneData();
-                Toast t = Toast.makeText(MainActivity.this,item.number, Toast.LENGTH_SHORT);
+                Toast t = Toast.makeText(MainActivity.this,item.point, Toast.LENGTH_SHORT);
                 t.show();
             }
         });
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 vote = "two";
                 loadPhoneData();
-                Toast t = Toast.makeText(MainActivity.this,item.number, Toast.LENGTH_SHORT);
+                Toast t = Toast.makeText(MainActivity.this,item.point, Toast.LENGTH_SHORT);
                 t.show();
             }
         });
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 vote = "three";
                 loadPhoneData();
-                Toast t = Toast.makeText(MainActivity.this,item.number, Toast.LENGTH_SHORT);
+                Toast t = Toast.makeText(MainActivity.this,item.point, Toast.LENGTH_SHORT);
                 t.show();
             }
         });
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 vote = "no";
                 loadPhoneData();
-                Toast t = Toast.makeText(MainActivity.this,item.number, Toast.LENGTH_SHORT);
+                Toast t = Toast.makeText(MainActivity.this,item.point, Toast.LENGTH_SHORT);
                 t.show();
             }
         });
@@ -98,9 +98,22 @@ public class MainActivity extends AppCompatActivity {
             String number = c.getString(c.getColumnIndex(COL_NUMBER));
             String image = c.getString(c.getColumnIndex(COL_IMAGE));
             if(vote.indexOf(title)!= -1) {
-                
+                int result = Integer.parseInt(number);
+                result = result+1;
+                number = String.valueOf(result);
                 item = new Item(id, title, number, image);
+                DB helper = new DB(MainActivity.this);
+                SQLiteDatabase db = helper.getWritableDatabase();
 
+                ContentValues cv = new ContentValues();
+                cv.put(COL_NUMBER, number);
+
+                db.update(
+                        TABLE_NAME,
+                        cv,
+                        COL_ID + " = ?",
+                        new String[]{String.valueOf(id)}
+                );
             }
         }
         c.close();
